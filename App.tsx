@@ -1,28 +1,18 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
 import React, {useEffect, useState, type PropsWithChildren} from 'react';
 import {
   Alert,
   FlatList,
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
-  View,
+  LogBox,
 } from 'react-native';
 import Card from './src/Card';
+import ImpCard from './src/ImpCard';
 import Moment from 'react-moment';
 import moment from 'moment';
+
+LogBox.ignoreAllLogs();
 
 const App = () => {
   let dt = moment(new Date());
@@ -111,26 +101,48 @@ const App = () => {
 
   const [nomralNotes, setNormalNotes] = useState();
 
-  // const [impNote, setImpNote] = useState();
+  const [impNotes, setImpNotes] = useState([]);
 
   function returnVal(e: string) {
     let tempArr = [];
-    Alert.alert(e);
+
     nomralNotes?.map(element => {
       if (element.id.toString() !== e) {
         tempArr.push(element);
       }
+      if (element.id.toString() === e) {
+        // setImpNotes(impNotes => [...impNotes, element]);
+        setImpNotes(current => [...current, element]);
+      }
     });
+
     setNormalNotes(tempArr);
   }
 
   useEffect(() => {
     setNormalNotes(arrData);
   }, []);
+  console.log('impNotes', impNotes);
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Normal Notes</Text>
+      {impNotes.length > 0 && (
+        <>
+          <Text style={styles.header}>Important Notes</Text>
+          <FlatList
+            numColumns={2}
+            key={'#'}
+            keyExtractor={item => '#' + item.id}
+            data={impNotes}
+            renderItem={element => (
+              <ImpCard items={element} len={impNotes?.length} />
+            )}></FlatList>
+        </>
+      )}
+
+      {nomralNotes && nomralNotes.length > 0 && (
+        <Text style={styles.header}>Normal Notes</Text>
+      )}
       {/* Scrill */}
       <FlatList
         numColumns={2}
