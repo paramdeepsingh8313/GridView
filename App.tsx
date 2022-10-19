@@ -106,12 +106,11 @@ const App = () => {
   function returnVal(e: string) {
     let tempArr = [];
 
-    nomralNotes?.map(element => {
+    nomralNotes?.map((element: {id: {toString: () => string}}) => {
       if (element.id.toString() !== e) {
         tempArr.push(element);
       }
       if (element.id.toString() === e) {
-        // setImpNotes(impNotes => [...impNotes, element]);
         setImpNotes(current => [...current, element]);
       }
     });
@@ -122,7 +121,19 @@ const App = () => {
   useEffect(() => {
     setNormalNotes(arrData);
   }, []);
-  console.log('impNotes', impNotes);
+
+  function impNotesValue(e: string) {
+    let tempArr = [];
+
+    impNotes?.map(element => {
+      if (element.id.toString() !== e) {
+        tempArr.push(element);
+      } else {
+        setNormalNotes(prev => [...prev, element]);
+      }
+    });
+    setImpNotes(tempArr);
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -135,7 +146,11 @@ const App = () => {
             keyExtractor={item => '#' + item.id}
             data={impNotes}
             renderItem={element => (
-              <ImpCard items={element} len={impNotes?.length} />
+              <ImpCard
+                items={element}
+                len={impNotes?.length}
+                impNotesValue={impNotesValue}
+              />
             )}></FlatList>
         </>
       )}

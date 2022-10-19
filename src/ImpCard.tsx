@@ -8,7 +8,10 @@ import {
 } from 'react-native';
 import React from 'react';
 
-const ImpCard = ({items, len}) => {
+const ImpCard = ({items, len, impNotesValue}) => {
+  function ValReturn(e: string) {
+    impNotesValue(e);
+  }
   return (
     <View
       style={[styles.cardContainer, {backgroundColor: items.item.bgColorName}]}
